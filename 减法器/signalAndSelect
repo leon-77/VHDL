@@ -1,0 +1,30 @@
+library ieee;
+use ieee.std_logic_1164.all;
+entity f_subtractor is
+	port(x,y,b0:in bit;
+		 d,b1:out bit);
+end entity;
+
+architecture inn of f_subtractor 
+	signal s : std_logic_vector(2 downto 0); --定义长度为3的信号量
+	begin
+		s <= x & y & b0; --利用联结符生成信号量
+		with s select --利用信号量对输出进行赋值
+			d <= '0' when "000",
+				 '1' when "001",
+				 '1' when "010",
+				 '0' when "011",
+				 '1' when "100",
+				 '0' when "101",
+				 '0' when "110",
+				 '1' when "111";
+			b1 <= '0' when "000",
+				 '1' when "001",
+				 '1' when "010",
+				 '1' when "011",
+				 '0' when "100",
+				 '0' when "101",
+				 '0' when "110",
+				 '1' when "111";
+end architecture inn;
+					 

@@ -1,0 +1,12 @@
+entity f_subtractor is
+	port(x,y,b0:in bit;
+		 d,b1:out bit);
+end entity;
+
+architecture inn of f_subtractor is --定义结构体
+	begin
+		process(x,y,b0) begin --定义敏感信号量 x、y、b0
+			d <= x xor y xor b0;
+			b1 <= (not x and b0) or (not x and y) or (y and b0);
+		end process;
+end architecture inn;

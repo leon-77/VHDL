@@ -1,0 +1,55 @@
+library ieee;
+use ieee.std_logic_1164.all;
+entity shft is --移位寄存器实体
+	port( din : in std_logic_vector(15 downto 0); -- 16位二进制数输入端口
+		 dout : out std_logic_vector(15 downto 0);-- 16位二进制输出端口
+		 clk : in bit; --时钟信号
+		 load : in bit; --1 数据预置
+		 con1 : in std_logic ; --1 左 
+		 con2 : in std_logic ; --1 移位 0 循环
+		 con3 : in std_logic ; --1 保持
+		 bout : out bit --串行移位输出
+		 );
+end entity shft;
+architecture inn of shft is --移位寄存器结构体
+	signal reg16 : std_logic_vector(15 downto 0); --16位二进制信号，16位数据暂存区
+	signal temp : std_logic;  --一位二进制信号，循环状态下最高位或最低位数据暂存区
+	begin
+		process(clk,load) begin --敏感信号，时钟信号与数据预置信号
+			if(load = '1') --多重if 嵌套判断语句
+				then reg16 <= din;
+					if(con2 = '1')
+						then if(con1 = '1')
+								then bout <= reg16(15);
+								else bout <= reg16(0);
+							end if;
+					end if;
+			else
+				if(con3 = '0') 
+					then if(con2 = '1')
+							then if(con1 = '1')
+									then reg16(15 downto 1) <= reg16(14 downto 0); --向左移位状态下 将低15 位的数据赋值给高15位数据
+										bout <= reg16(15);   -- 最高位数据输出
+									else
+										reg16(14 downto 0) <= reg16(15 downto 1); --向右移位状态下 将高15 位的数据赋值给低15位数据
+										bout <= reg16(0); --最低位数据输出
+								 end if;
+							else
+								if(con1 = '1')
+									then temp <= reg16(15); --左循环状态下将最高位数据暂存
+										reg16(15 downto 1) <= reg16(14 downto 0); --将低15位的数据赋值给 高15位数据
+										reg16(0) <= temp; --将暂存数据赋值给最低位
+									else 
+										temp <= reg16(0); --右循环状态下将最低位数据暂存
+										reg16(14 downto 0) <= reg16(15 downto 1);--将高15位的数据赋值给 低15位数据
+										reg16(15) <= temp;--将暂存数据赋值给最高位
+								end if;
+						end if;
+				end if;
+			end if;
+		end process;
+		dout <= reg16; --将16位暂存数据输出
+end architecture inn;
+							
+										
+					

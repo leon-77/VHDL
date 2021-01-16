@@ -1,0 +1,16 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity bjq is --定义一个半减器实体
+port (x_h,y_h:in std_logic; --定义两个输入端口分别为减数和被减数
+c1,s1:out std_logic); --定义两个输出端口分别为差别和借位
+end;
+
+architecture one of bjq is
+begin
+process(x_h,y_h)
+begin
+s1<= x_h xor y_h; --输入和输出符合以下逻辑关系
+c1<= (not x_h) and y_h;
+end process;
+end; 

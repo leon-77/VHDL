@@ -1,0 +1,33 @@
+entity f_subtractor is
+	port(x,y,b0:in bit;
+		 d,b1:out bit);
+end entity;
+
+
+architecture inn of f_subtractor is
+	begin
+		process(x,y,b0) begin --定义敏感信号量 x、y、b0
+			if(x='1') then --多重 if 嵌套判断语句
+				if(y='0') then
+					if(b0='0') then d <= '1' ; b1 <= '0';
+					else d <= '0' ; b1 <= '0';
+					end if;
+				else 
+					if(b0='1') then d <= '1' ; b1 <= '1';
+					else d <= '0' ;  b1 <= '0';
+					end if;
+				end if;
+			else
+				if(y='0') then
+					if(b0='0') then d <= '0' ;  b1 <= '0';
+					else d <= '1' ; b1 <= '1';
+					end if;
+				else 
+					if(b0='1') then d <= '0' ; b1 <= '1';
+					else d <= '1' ; b1 <= '1';
+					end if;
+				end if;
+			end if;
+		end process;
+end architecture inn;
+	

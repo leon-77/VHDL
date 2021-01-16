@@ -1,0 +1,11 @@
+module f_substractor(
+	input x,
+	input y
+	input b0,
+	output d,
+	output b1
+);
+
+assign d = x ^ y ^ b0;
+assign b1 = (~x & b0) | (~x & y) | (y & b0);
+endmodule

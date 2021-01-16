@@ -1,0 +1,29 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity eight_bit_subtractor is --八位减法器实体
+port(A,B: in std_logic_vector(7 downto 0); --八位减数和被减数输入端口
+	  C0: in std_logic; 
+	  S:out std_logic_vector(7 downto 0); --八位差别数输出端口
+	  C1: out std_logic ); --一位借位输出端口
+end eight_bit_subtractor;
+
+architecture full of eight_bit_subtractor is --八位减法器结构体部分
+
+component f_subtractor --例化全减器
+port(x,y,c0:in std_logic;
+	c_out,s_out:out std_logic);
+end component;
+
+signal q1,q2,q3,q4,q5,q6,q7: std_logic; --定义七个连接信号
+begin --根据电路图将端口映射
+u1:f_subtractor port MAP(x=>A(0),y=>B(0),c0=>C0,c_out=>q1,s_out=>S(0)); 
+u2:f_subtractor port MAP(x=>A(1),y=>B(1),c0=>q1,c_out=>q2,s_out=>S(1));
+u3:f_subtractor port MAP(x=>A(2),y=>B(2),c0=>q2,c_out=>q3,s_out=>S(2));
+u4:f_subtractor port MAP(x=>A(3),y=>B(3),c0=>q3,c_out=>q4,s_out=>S(3));
+u5:f_subtractor port MAP(x=>A(4),y=>B(4),c0=>q4,c_out=>q5,s_out=>S(4)); 
+u6:f_subtractor port MAP(x=>A(5),y=>B(5),c0=>q5,c_out=>q6,s_out=>S(5));
+u7:f_subtractor port MAP(x=>A(6),y=>B(6),c0=>q6,c_out=>q7,s_out=>S(6));
+u8:f_subtractor port MAP(x=>A(7),y=>B(7),c0=>q7,c_out=>C1,s_out=>S(7));
+end;

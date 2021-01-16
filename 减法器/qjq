@@ -1,0 +1,25 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity qjq is --全减器实体
+port (x,y,c0:in std_logic;
+	c_out,s_out:out std_logic);
+end;
+
+architecture one of qjq is
+component bjq --半减器例化
+port (x_h,y_h:in std_logic;
+c1,s1:out std_logic);
+end component;
+
+component org --或门电路例化
+port(a,b:in std_logic;
+		o:out std_logic);
+end component;
+
+signal d,e,f:std_logic; --连接信号
+begin
+u1:bjq port map(x_h=>x,y_h=>y,c1=>e,s1=>d); --端口映射
+u2:bjq port map(x_h=>e,y_h=>c0,c1=>f,s1=>s_out);
+u3:org port map(a=>e,b=>f,o=>c_out);
+end;

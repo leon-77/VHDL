@@ -1,0 +1,30 @@
+library ieee;
+use ieee.std_logic_1164.all; --导入库和程序包
+--定义实体 f_subtractor
+-- 定义三个输入端口都是 std_logic类型
+-- x为减数 y为被减数 b0为借位
+-- 定义两个输出端口 d b1
+-- d为两数差值 b1为借位
+entity f_subtractor is
+	port(x,y,b0:in std_logic;
+		 d,b1:out std_logic);
+end entity; --实体部分结束
+
+architecture inn of f_subtractor 
+	-- 定义长度为3的信号
+	signal s : std_logic_vector(2 downto 0);
+	begin
+		s <= x & y & b0; --生成长度为3的信号
+		process(x,y,b0) begin --定义x、y、b0为敏感信号量
+			case(s) is
+				when "000" => d <= '0'; b1 <= '0';
+				when "001" => d <= '1'; b1 <= '1';
+				when "010" => d <= '1'; b1 <= '1';
+				when "011" => d <= '0'; b1 <= '1';
+				when "100" => d <= '1'; b1 <= '0';
+				when "101" => d <= '0'; b1 <= '0';
+				when "110" => d <= '0'; b1 <= '0';
+				when "111" => d <= '1'; b1 <= '1';
+			end case;
+		end process;
+end architecture inn;

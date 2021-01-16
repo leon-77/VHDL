@@ -1,0 +1,32 @@
+entity f_subtractor is
+	port(x,y,b0:in bit;
+		 d,b1:out bit);
+end entity;
+
+architecture inn of f_subtractor is --定义结构体 inn
+	begin
+		process(x,y,b0) begin --定义敏感信号量 x、y、b0
+			case(x) is --定义多重case 嵌套判断语句
+				when '0' => case(y) is
+								when '0' => case(b0) is
+									when '0' => d <= '0'; b1 <= '0';
+									when '1' => d <= '1'; b1 <= '1';
+									end case;
+								when '1' => case(b0) is
+									when '0' => d <= '1'; b1 <= '1';
+									when '1' => d <= '0'; b1 <= '1';
+									end case;
+							end case;
+				when '1' => case(y) is
+								when '0' => case(b0) is
+									when '0' => d <= '1'; b1 <= '0';
+									when '1' => d <= '0'; b1 <= '0';
+									end case;
+								when '1' => case(b0) is
+									when '0' => d <= '0'; b1 <= '0';
+									when '1' => d <= '1'; b1 <= '1';
+									end case;
+							end case;
+			end case;
+		end process;
+end architecture inn;

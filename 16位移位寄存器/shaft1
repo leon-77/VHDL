@@ -1,0 +1,41 @@
+library ieee;
+use ieee.std_logic_1164.all;
+entity shft is
+	port( din : in std_logic_vector(15 downto 0);
+		 dout : out std_logic_vector(15 downto 0);
+		 clk : in bit;
+		 load : in bit;
+		 con1 : in std_logic ; --1 左 
+		 con2 : in std_logic ; --1 移位 0 循环
+		 con3 : in std_logic ; --1 保持
+		 bout : out bit;
+		 );
+end entity shft;
+
+architecture inn of shft is
+	signal reg16 : std_logic_vector(15 downto 0);
+	signal temp : std_logic; 
+	signal con : std_logic_vector(2 downto 0);
+	begin
+		con <= con1 & con2 & con3;
+		process(clk,load) begin
+			if(load = '1')
+				then 
+					reg16 <= din;
+					case(con) is
+						when "110" => bout <= reg16(15);
+						when "010" => bout <= reg16(0);
+						when others => null;
+					end case;
+				else
+					case(con) is
+						when "110" => reg16(15 downto 1) <= reg16(14 downto 0);bout <= reg16(15);
+						when "010" => reg16(14 down 0) <= reg16(15 downto 1);bout <= reg16(0);
+						when "100" => temp <= reg16(15);reg16(15 downto 1) <= reg16(14 downto 0);reg16(0) <= temp;
+						when "000" => temp <= reg16(0);reg16(14 down 0) <= reg16(15 downto 1);reg16(15) <= temp;
+						when others => null;
+					end case;
+			end if;
+		end process;
+		dout <= reg16;
+end architecture inn;
